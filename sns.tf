@@ -1,4 +1,5 @@
 ## create a SNS topic which will be handling request from lambda function
+
 resource "aws_sns_topic" "Vehicle_sns_terraform" {
     name = "Vehicle_sns_terraform"
 }
@@ -143,5 +144,5 @@ POLICY
 resource "aws_sns_topic_subscription" "email-target" {
   topic_arn = aws_sns_topic.final_report.arn
   protocol  = "email"
-  endpoint  = "youremail address"
+  endpoint  = "rasheerashee@yandex.com"
 }

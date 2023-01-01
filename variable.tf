@@ -4,17 +4,14 @@ variable "region" {
 }
 
 
-
-
-
 variable "access" {
   description = "Access key"
-  default     = " your Access key"
+  default     = "Your_access_key_here"
 }
 
 variable "secret" {
   description = "Secret key"
-  default     = "your secret key"
+  default     = "Your_secret_key_here"
 }
 
 

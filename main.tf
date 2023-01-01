@@ -106,7 +106,7 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
 
 
 # Event source from SQS --- connect two_wheeler queue to recordreader1 lambda
-resource "aws_lambda_event_source_mapping" "event_source_mapping" {
+resource "aws_lambda_event_source_mapping" "event_source_mapping_twowheel" {
   event_source_arn = aws_sqs_queue.two_whl_sqs.arn
   enabled          = true
   function_name    = "${aws_lambda_function.two_whl_recorder.arn}"
@@ -114,14 +114,15 @@ resource "aws_lambda_event_source_mapping" "event_source_mapping" {
 }
 
 # Event source from SQS --- connect four_wheeler queue to recordreader2 lambda
-resource "aws_lambda_event_source_mapping" "event_source_mapping_truck" {
+resource "aws_lambda_event_source_mapping" "event_source_mapping_fourwheel" {
   event_source_arn = aws_sqs_queue.four_whl_sqs.arn
   enabled          = true
   function_name    = "${aws_lambda_function.four_whl_recorder.arn}"
   batch_size       = 1
 }
 
-## cloudwatch event
+
+## cloudwatch event: once in day consolidation of records in single csv will be done.
 
 resource "aws_cloudwatch_event_rule" "once_a_day" {
     name = "Once_a_day"

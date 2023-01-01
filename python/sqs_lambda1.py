@@ -9,3 +9,4 @@ def lambda_handler(event, context):
     print("Appending output at",time.ctime())
     print(event)
     print("body:",event.get("Records")[0].get("body"))
+    return None

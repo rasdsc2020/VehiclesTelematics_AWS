@@ -1,3 +1,4 @@
+''' This module finds the overspeeding two wheelers and save in s3 bucket.'''
 import json, pandas as pd
 import numpy, boto3
 import os
@@ -13,6 +14,7 @@ SPEED_ALERT_THRESHOLD = os.environ.get("SPEED_ALERT_THRESHOLD", 50)
 ALERT_PHONE_NUMBER = os.environ.get("ALERT_PHONE_NUMBER", None)
 
 def get_new_data(event):
+    '''Function to extract all vehicle related infromation from sqs records.'''
     # TODO implement
     # Create a list to store new object keys.
     written_objects = []
@@ -43,6 +45,7 @@ def get_new_data(event):
 
 
 def lambda_handler(event, context):
+    '''Function to filter two wheelers having speed greater than the threshold set in environment variable.'''
     # Call the helper method
     data = get_new_data(event)
     print("Data:",data)

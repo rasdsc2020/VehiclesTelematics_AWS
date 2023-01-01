@@ -1,5 +1,5 @@
 
-# Archive file for LAMBDA FUNCTION NO. 1
+# Archive file for LAMBDA FUNCTION NO. 1: on the fly process data from kinesis firehose.
 #create zip file for lambda function
 data "archive_file" "firehoselambda" {
   type        = "zip"
@@ -9,14 +9,14 @@ data "archive_file" "firehoselambda" {
 
 
 # Archive file for LAMBDA FUNCTION NO. 2
-#create zip file for the function invoked after s3 bucket to prepare data from sns
+#create zip file for the function invoked after s3 bucket to prepare data from sns.
 data "archive_file" "sns_prep" {
   type        = "zip"
   source_file = "python/sns_prep.py"
   output_path = "outputs/sns_prep.zip"
 }
 
-# Archive file for LAMBDA FUNCTION NO. 3
+# Archive file for LAMBDA FUNCTION NO. 3: filter two wheeler overspeeding vehicles.
 #create zip file for lambda function
 data "archive_file" "two_whl_recorder" {
   type        = "zip"
@@ -25,7 +25,7 @@ data "archive_file" "two_whl_recorder" {
 }
 
 
-# Archive file for LAMBDA FUNCTION NO. 4
+# Archive file for LAMBDA FUNCTION NO. 4: filter four wheeler overspeeding vehicles.
 #create zip file for lambda function
 data "archive_file" "four_whl_recorder" {
   type        = "zip"
@@ -34,7 +34,7 @@ data "archive_file" "four_whl_recorder" {
 }
 
 
-# Archive file for LAMBDA FUNCTION NO. 5
+# Archive file for LAMBDA FUNCTION NO. 5: merge all vehicles in one file.
 #create zip file for lambda function
 data "archive_file" "agglambda" {
   type        = "zip"
@@ -43,9 +43,9 @@ data "archive_file" "agglambda" {
 }
 
 
-# create a lambda layer for pandas and numpy: awswrangler
+# create a lambda layer for pandas and numpy: awswrangler: pandas and other libraries are not available directly.
 resource "aws_lambda_layer_version" "aws_wrangler_layer" {
-  filename = "awswrangler-layer-2.10.0-py3.8.zip"
+  filename = "aws_wrangler.zip"
   layer_name = "pandaslayer"
   compatible_runtimes = ["python3.8"]
 }

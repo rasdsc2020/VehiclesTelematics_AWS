@@ -1,5 +1,6 @@
-## create a function to process incoming json data for SNS function
-## connected to s3 put object --> records from firehose will come to s3 and this lambda will add messageattributes for sns
+'''create a function to process incoming json data from s3 to SNS.
+connected to s3 put object --> records from firehose will come to s3 
+and this lambda will add messageattributes for sns. SNS will send the data to respective sqs'''
 
 import json
 import urllib.parse
@@ -8,13 +9,22 @@ import time
 import pandas as pd
 #import awswrangler as wr
 
-print('Loading function')
 
 s3 = boto3.client('s3')
 sns = boto3.client('sns')
-message = {"foo": "bar"}
+#print(sns.list_topics())
+Tarn = ""
+for arn in sns.list_topics()['Topics']:
+    if "Vehicle_sns_terraform" in arn['TopicArn']:
+        Tarn = arn['TopicArn']
+
+
+#placeholder dict
+message = {"key": "val"}
 
 def lambda_handler(event,context):
+    '''Function to read data as soon as data is put into s3 bucket and send it to sns service with
+    message and subject based on vehicle type [2 or 4 wheeler].'''
     #print("Received event: " + json.dumps(event, indent=2))
     print("Event orig:",event)
     # Get the object, Key and eventName from the event and show its content type
@@ -22,7 +32,7 @@ def lambda_handler(event,context):
     key = event['Records'][0]['s3']['object']['key']
     eventname = event['Records'][0]['eventName']
     try:
-        print("Eventname:",eventname)
+        #print("Eventname:",eventname)
         # Verify that event is created from preprocessed-sns-bucket.
         if eventname == 'ObjectCreated:Put'  and bucket == 'preprocessed-sns-bucket':
             obj = s3.get_object(Bucket=bucket, Key = key)
@@ -35,7 +45,7 @@ def lambda_handler(event,context):
                 data =  str(df.iloc[i,0])
                 print("type data",type(data))
                 try:
-                    if "Passenger" in data:
+                    if "two_whl" in data:
                         vehicletype = "Two wheeler"
                         sub = "Data from Two wheeler telematic sensor"
                     else:
@@ -44,9 +54,12 @@ def lambda_handler(event,context):
                 
                     print("Type of vehicle :",vehicletype)
                     try:
-                        sns_response = sns.publish(TargetArn='arn:aws:sns:eu-central-1:330064558504:Vehicle_sns_terraform', Message=json.dumps({'default': json.dumps(data)}),
-                        Subject=sub,
-                        MessageStructure='json', MessageAttributes = {"VehicleType": {"DataType":"String","StringValue": vehicletype}} )
+                        if Tarn:
+                            sns_response = sns.publish(TargetArn=Tarn, Message=json.dumps({'default': json.dumps(data)}),
+                            Subject=sub,
+                            MessageStructure='json', MessageAttributes = {"VehicleType": {"DataType":"String","StringValue": vehicletype}} )
+                        else:
+                            print("Vehicle_sns_terraform arn not found")
                     except Exception as e:
                         print(e.message, e.args)
                         

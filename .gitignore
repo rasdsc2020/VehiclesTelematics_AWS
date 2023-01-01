@@ -2,3 +2,4 @@
 terraform.exe
 outputs/*.zip
 .vscode/
+delete_s3.py

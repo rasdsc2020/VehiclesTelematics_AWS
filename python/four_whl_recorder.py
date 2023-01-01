@@ -1,20 +1,20 @@
+''' This module finds the overspeeding 4 wheelers and save in s3 bucket.'''
 import json, pandas as pd
 import numpy, boto3
 import os
 import pytz
 from datetime import datetime
-tz = pytz.timezone('Europe/Berlin')
 import time
 import pandas as pd
 
-
+tz = pytz.timezone('Europe/Berlin')
 s3_client = boto3.client('s3')
 SPEED_ALERT_THRESHOLD = os.environ.get("SPEED_ALERT_THRESHOLD", 50)
 ALERT_PHONE_NUMBER = os.environ.get("ALERT_PHONE_NUMBER", None)
 
 def get_new_data(event):
-    # TODO implement
     # Create a list to store new object keys.
+    '''Function to extract all vehicle related infromation from sqs records.'''
     written_objects = []
     print("output from sqs/sns lambda")
     print("Appending output at",time.ctime())
@@ -44,6 +44,7 @@ def get_new_data(event):
 
 def lambda_handler(event, context):
     # Call the helper method
+    ''' Function to filter four wheelers having speed greater than the threshold set in environment variable. '''
     data = get_new_data(event)
     print("Data:",data)
     print("Length of dataframe before saving to s3 bucket",len(data))

@@ -1,15 +1,17 @@
+'''This module processed the incoming records from vehicle sensors.'''
+
 import json
 import base64
 
 
 def transform_data(data):
-    """ Invoked once for each record """
+    """ Invoked once for each record and decide if vehicle is two_whl or four_whl"""
     print("Processing data: %s" % data)
     vehiclelist = ['VW', 'PORSCHE', 'BMW', 'AUDI', 'MERCEDES']
     if any(substring in data for substring in vehiclelist):
-        data = data + " " + "Passenger"
+        data = data + " " + "four_whl"
     else:
-        data = data + " " + "Truck"
+        data = data + " " + "two_whl"
 
     return data 
 
@@ -24,7 +26,6 @@ def lambda_handler(event, context):
         print('payload:',payload)
         newpayload = transform_data(payload)  # manipulate/validate record
         x = base64.b64encode(json.dumps(newpayload).encode('utf-8') + b'\n').decode('utf-8')
-        print(x)
     
         output_record = {
             'recordId': record['recordId'],
