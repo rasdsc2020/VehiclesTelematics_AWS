@@ -2,6 +2,8 @@
 
 This architecture is designed to process and analyze real-time data from vehicle telematics sensors in order to identify overspeeding two-wheeler and four-wheeler vehicles. It uses a combination of AWS services, including Amazon Kinesis Firehose, AWS Lambda, Amazon Simple Notification Service (SNS), Amazon Simple Queue Service (SQS), and Amazon S3, to build a scalable and fault-tolerant system.
 
+![architecture](archi.png)
+
 
 ## Prerequisites:
 
@@ -41,9 +43,14 @@ docker run --name telematicscontainer telematics:terraform
 - terraform fails to delete the existing sqs and lambda mapping with *terraform destroy* command
 
 #### How to fix
-- Check the existing mapping *aws lambda list-event-source-mappings* via aws cli
-- delete the uuid like *aws lambda delete-event-source-mapping --uuid 7f8dcc0c-f568-412e-9dd9-357da029d0ce* or manually from console
+1. Log in to the console using: https://aws.amazon.com/console/
+2. Search for CloudShell in search bar and click on the CloudShell service.
+3. Check the existing mapping *aws lambda list-event-source-mappings* 
+4. Copy the uuid  
+5. Delete the uuid like *aws lambda delete-event-source-mapping --uuid 3b1b0cb3-ad79-46e4-be1c-a4d157eaafdc*
+6. Repeat for other uuid
 
 ## License
 
 This project is licensed under the [MIT](https://choosealicense.com/licenses/mit/) License.
+
