@@ -11,6 +11,34 @@ This architecture is designed to process and analyze real-time data from vehicle
 - IAM User with Access Key & Secret Key
 - Docker
 
+## Folder structure
+    .
+    ├── Dockerfile              # Docker file to create the architecture
+    ├── aws_wrangler.zip        # Pandas and numpy packages to run lambda function on aws
+    ├── config.py               # Set aws credentials to send data to aws created architecture
+    ├── iam                     # IAM roles and policies
+    │   ├── lambda-assume-policy.json
+    │   └── lambda-policy.json
+    ├── lambda-iam.tf
+    ├── lambda.tf
+    ├── main.py                 # Python to send data to send data to aws created architecture 
+    ├── main.tf                 # Main terraform file to create architecture, will be called automatically once docker image built
+    ├── outputs                 # Contains zipped layers for aws lambda functions
+    ├── policy.tf               # Policies of aws services
+    ├── python                  # All python functions for lambda functions
+    │   ├── Aggregator.py
+    │   ├── Datagenerator.py
+    │   ├── firehose_lambda.py
+    │   ├── four_whl_recorder.py
+    │   ├── sns_prep.py
+    │   ├── sqs_lambda1.py
+    │   └── two_whl_recorder.py
+    ├── requirements.txt
+    ├── sns.tf                  # Terraform file to create sns
+    └── variable.tf             # Variables used to create architecture
+
+
+
 ## Running the project
 
 ### 1. Setup:
